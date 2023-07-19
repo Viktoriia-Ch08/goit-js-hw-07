@@ -29,14 +29,23 @@ function imageItemClickHandler(event) {
   if (event.target.nodeName !== 'IMG') {
     return;
   }
-
   event.preventDefault();
-  displayImagePreview(event.target.dataset.source);
+  displayImagePreview(event.target.dataset.source, event);
 }
+let currentLightBoxInstance = null;
 
-const displayImagePreview = imageUrl => {
+const displayImagePreview = (imageUrl, event) => {
   const instance = basicLightbox.create(`
     <img src="${imageUrl}" width="800" height="600">
 `);
+  currentLightBoxInstance = instance;
   instance.show();
 };
+
+document.addEventListener('keydown', closeModalByEscape);
+
+function closeModalByEscape(event) {
+  if (event.code === 'Escape') {
+    currentLightBoxInstance?.close();
+  }
+}
